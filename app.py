@@ -22,8 +22,7 @@ app.secret_key = 'troque_esse_valor_por_algo_secreto'
 
 @app.route('/')
 def index():
-    data = carregar_dados()
-    return render_template('form.html', data=data)
+    return render_template('form.html', data={})
 
 @app.route('/visualizar', methods=['POST'])
 def visualizar():
@@ -34,7 +33,7 @@ def visualizar():
 def salvar():
     form_data = request.form.to_dict()
     salvar_dados_em_arquivo(form_data)
-    flash('Dados salvos com sucesso em dados.json!', 'success')
+    flash('Dados salvos com sucesso!', 'success')
     return redirect(url_for('index'))
 
 @app.route('/gerar', methods=['POST'])
