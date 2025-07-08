@@ -3,26 +3,24 @@ from flask import (
     session, redirect, url_for, flash
 )
 from weasyprint import HTML
-import json
+from flask import session
 import os
-def carregar_dados():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
+import secrets
+print(secrets.token_hex(16))
+
     return {}
 
-def salvar_dados_em_arquivo(dados):
-    with open(DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(dados, f, ensure_ascii=False, indent=2)
+
 
 DATA_FILE = os.path.join(os.path.dirname(__file__), 'dados.json')
 
 app = Flask(__name__)
-app.secret_key = 'troque_esse_valor_por_algo_secreto'
+app.secret_key = 'um_valor_secreto_aleatorio'
 
 @app.route('/')
 def index():
-    return render_template('form.html', data={})
+    data = session.get('form_data', {})
+    return render_template('form.html', data=data)
 
 @app.route('/visualizar', methods=['POST'])
 def visualizar():
@@ -32,7 +30,7 @@ def visualizar():
 @app.route('/salvar', methods=['POST'])
 def salvar():
     form_data = request.form.to_dict()
-    salvar_dados_em_arquivo(form_data)
+    session['form_data'] = form_data
     flash('Dados salvos com sucesso!', 'success')
     return redirect(url_for('index'))
 
