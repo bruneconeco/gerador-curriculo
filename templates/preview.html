@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Pré-visualização do Currículo</title>
+  <style>
+    .btn-edit {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #7f8c8d;
+      color: #fff;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color .2s;
+    }
+    .btn-edit:hover {
+      background-color: #656d74;
+    }
+    .btn-download {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 10px 20px;
+      background-color: #4a90e2;
+      color: #fff;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color .2s;
+    }
+    .btn-download:hover {
+      background-color: #357ab8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pré-visualização do Currículo</h1>
+  <p>Confira abaixo como seu currículo será gerado:</p>
+
+  {% include 'curriculo.html' %}
+
+  <!-- Botão Voltar para editar -->
+  <button
+    type="button"
+    class="btn-edit"
+    onclick="history.back()"
+  >
+    ← Voltar e editar
+  </button>
+
+  <!-- Formulário de Download -->
+  <form action="/gerar" method="post" style="display:inline;">
+    {% for campo, valor in request.form.items() %}
+      <input type="hidden" name="{{ campo }}" value="{{ valor }}">
+    {% endfor %}
+    <button type="submit" class="btn-download">
+      Baixar PDF
+    </button>
+  </form>
+</body>
+</html>

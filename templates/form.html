@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Currículo</title>
+  <style>
+    /* Reset rápido para box sizing */
+    *, *::before, *::after { box-sizing: border-box; }
+    .theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 1000;
+  transition: background 0.3s;
+}
+.theme-toggle:hover {
+  background: #357ab8;
+}
+
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa; color: #333; line-height: 1.6;
+    }
+    .container {
+      max-width: 700px; margin: 40px auto; padding: 30px;
+      background-color: #fff; border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    h1 { font-size: 28px; margin-bottom: 20px; text-align: center; color: #2c3e50; }
+
+    fieldset {
+      border: 1px solid #d1d7de; padding: 20px;
+      margin-bottom: 20px; border-radius: 6px;
+    }
+
+    legend { padding: 0 10px; font-weight: bold; color: #34495e; }
+
+    .form-group { margin-bottom: 15px; }
+
+    label {
+      display: block; margin-bottom: 6px;
+      font-size: 14px; color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%; padding: 10px;
+      border: 1px solid #ccd0d5; border-radius: 4px;
+      font-size: 14px; transition: border-color .2s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none; border-color: #4a90e2;
+    }
+
+    textarea { resize: vertical; }
+
+    .btn-submit {
+      width: 100%; padding: 12px;
+      background-color: #4a90e2; color: #fff;
+      font-size: 16px; font-weight: bold;
+      border: none; border-radius: 4px;
+      cursor: pointer; transition: background-color .2s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover { background-color: #357ab8; }
+    .flash-success {
+  color: green;
+  margin-bottom: 10px;
+}
+.flash-error {
+  color: red;
+  margin-bottom: 10px;
+}
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.dark-mode .container {
+  background-color: #2c2c2c;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+body.dark-mode input,
+body.dark-mode textarea {
+  background-color: #3a3a3a;
+  color: #fff;
+  border-color: #555;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus {
+  border-color: #4a90e2;
+}
+
+body.dark-mode fieldset {
+  border-color: #555;
+}
+
+body.dark-mode .theme-toggle {
+  background: #888;
+}
+  </style>
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="messages">
+      {% for category, msg in messages %}
+        <p class="flash-{{ category }}">{{ msg }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<button id="toggle-theme" class="theme-toggle">🌙 Modo Noturno</button>
+
+  <div class="container">
+    <h1>Gerador de Currículo</h1>
+
+    <form action="/visualizar" method="post">
+
+      <fieldset>
+        <legend>Informações Pessoais</legend>
+
+        <div class="form-group">
+          <label for="nome">Nome completo</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            value="{{ data.get('nome','') }}"
+            placeholder="Ex: João da Silva"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ data.get('email','') }}"
+            placeholder="seu@email.com"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone</label>
+          <input
+            type="text"
+            id="telefone"
+            name="telefone"
+            value="{{ data.get('telefone','') }}"
+            placeholder="(11) 99999-9999"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="localizacao">Cidade/Estado</label>
+          <input
+            type="text"
+            id="localizacao"
+            name="localizacao"
+            value="{{ data.get('localizacao','') }}"
+            placeholder="São Paulo, SP"
+            required>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Resumo Profissional</legend>
+        <div class="form-group">
+          <textarea
+            id="resumo"
+            name="resumo"
+            rows="4"
+            placeholder="Um breve parágrafo sobre você"
+            required>{{ data.get('resumo','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Experiência Profissional</legend>
+        <div class="form-group">
+          <textarea
+            id="experiencia"
+            name="experiencia"
+            rows="6"
+            placeholder="Ex:\nCargo – Empresa (Mês/Ano – Mês/Ano)\n• Atividade 1\n• Atividade 2"
+            required>{{ data.get('experiencia','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Formação Acadêmica</legend>
+        <div class="form-group">
+          <textarea
+            id="formacao"
+            name="formacao"
+            rows="4"
+            placeholder="Ex:\nCurso – Instituição (Ano de Conclusão)"
+            required>{{ data.get('formacao','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Habilidades Técnicas</legend>
+        <div class="form-group">
+          <textarea
+            id="habilidades"
+            name="habilidades"
+            rows="3"
+            placeholder="Ex:\nPython\nSQL\nExcel"
+            required>{{ data.get('habilidades','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Idiomas</legend>
+        <div class="form-group">
+          <textarea
+            id="idiomas"
+            name="idiomas"
+            rows="2"
+            placeholder="Ex:\nInglês – Avançado\nEspanhol – Intermediário"
+            required>{{ data.get('idiomas','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Certificações (opcional)</legend>
+        <div class="form-group">
+          <textarea
+            id="certificacoes"
+            name="certificacoes"
+            rows="3"
+            placeholder="Ex:\nCertificação – Órgão Emissor (Ano)">{{ data.get('certificacoes','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Links Profissionais (opcional)</legend>
+        <div class="form-group">
+          <textarea
+            id="links"
+            name="links"
+            rows="2"
+            placeholder="Ex:\nLinkedIn: https://..."
+          >{{ data.get('links','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn-submit">Visualizar Currículo</button>
+      <button
+        type="submit"
+        formaction="/salvar"
+        formmethod="post"
+        class="btn-submit"
+        style="background: #7f8c8d;"
+      >
+        Salvar Dados
+      </button>
+
+    </form>
+  </div>
+  <script>
+  const toggleBtn = document.getElementById('toggle-theme');
+  const body = document.body;
+
+  // Carrega preferência salva
+  if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark-mode');
+    toggleBtn.textContent = '☀️ Modo Claro';
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    const isDark = body.classList.contains('dark-mode');
+    toggleBtn.textContent = isDark ? '☀️ Modo Claro' : '🌙 Modo Noturno';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>
