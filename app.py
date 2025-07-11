@@ -6,11 +6,8 @@ from weasyprint import HTML
 import os
 import secrets
 
-# Gera uma chave secreta segura (use isso uma vez e depois fixe no código)
-# print(secrets.token_hex(16))  # Pode comentar ou remover após gerar
-
 app = Flask(__name__)
-app.secret_key = 'substitua_por_uma_chave_real_gerada_com_secrets'  # Troque por uma chave real
+app.secret_key = 'substitua_por_uma_chave_real_gerada_com_secrets' 
 
 @app.route('/')
 def index():
