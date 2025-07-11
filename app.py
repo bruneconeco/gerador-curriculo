@@ -7,7 +7,7 @@ import os
 import secrets
 
 app = Flask(__name__)
-app.secret_key = 'substitua_por_uma_chave_real_gerada_com_secrets' 
+app.secret_key = 's03fd5df2c81567de5829541c9664ce71' 
 
 @app.route('/')
 def index():
