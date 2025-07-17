@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Gerador de Currículo</title>
   <style>
-    /* Reset rápido para box sizing */
+   
     *, *::before, *::after { box-sizing: border-box; }
     .theme-toggle {
   position: fixed;
@@ -201,6 +201,18 @@ body.dark-mode .theme-toggle {
             rows="6"
             placeholder="Ex:\nCargo – Empresa (Mês/Ano – Mês/Ano)\n• Atividade 1\n• Atividade 2"
             required>{{ data.get('experiencia','') }}</textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Projetos Pessoais</legend>
+        <div class="form-group">
+          <textarea
+            id="projetos"
+            name="projetos"
+            rows="6"
+            placeholder="Ex:\nCalculadora, conversor de doc para pdf, etc"
+            required>{{ data.get('projetos', '') }}</textarea>
         </div>
       </fieldset>
 
